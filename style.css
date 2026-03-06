@@ -68,3 +68,29 @@ h1 {
 .item button:hover {
   background-color: #218838;
 }
+header {
+  background-color: #333;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#topBar button {
+  margin-left: 10px;
+  padding: 8px 12px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#topBar a button {
+  background-color: #007bff;
+  color: white;
+}
+
+#topBar button:hover {
+  opacity: 0.8;
+}

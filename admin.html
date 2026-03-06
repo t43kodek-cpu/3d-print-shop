@@ -1,65 +1,24 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Admin Panel</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+const savedProducts = JSON.parse(localStorage.getItem("products"));
+if(savedProducts) {
+  products.splice(0, products.length, ...savedProducts);
+}
 
-<h1>Admin - Add Product</h1>
+const form = document.getElementById("adminForm");
 
-<form id="adminForm">
-  <label>Product Name:</label><br>
-  <input type="text" id="name" required><br><br>
+form.addEventListener("submit", function(e){
+  e.preventDefault();
 
-  <label>Description:</label><br>
-  <textarea id="description" required></textarea><br><br>
+  const newProduct = {
+    id: products.length + 1,
+    name: document.getElementById("name").value,
+    description: document.getElementById("description").value,
+    price: parseFloat(document.getElementById("price").value),
+    image: document.getElementById("image").value
+  };
 
-  <label>Price:</label><br>
-  <input type="number" id="price" required><br><br>
+  products.push(newProduct);
+  saveProducts();
 
-  <label>Image URL:</label><br>
-  <input type="text" id="image" required><br><br>
-
-  <button type="submit">Add Product</button>
-</form>
-
-<script src="products.js"></script>
-<script src="script.js"></script>
-<script>
-  const form = document.getElementById("adminForm");
-
-  form.addEventListener("submit", function(e){
-    e.preventDefault();
-
-    const newProduct = {
-      id: products.length + 1,
-      name: document.getElementById("name").value,
-      description: document.getElementById("description").value,
-      price: parseFloat(document.getElementById("price").value),
-      image: document.getElementById("image").value
-    };
-
-    // Add to products array
-    products.push(newProduct);
-
-    // Save to localStorage (so it appears on your shop)
-    localStorage.setItem("products", JSON.stringify(products));
-
-    alert(newProduct.name + " added successfully!");
-
-    // Reset form
-    form.reset();
-  });
-
-  // Load products from localStorage if available
-  const savedProducts = JSON.parse(localStorage.getItem("products"));
-  if(savedProducts) {
-    products.splice(0, products.length, ...savedProducts);
-  }
-</script>
-
-<a href="index.html">← Back to Shop</a>
-
-</body>
-</html>
+  alert(newProduct.name + " added successfully!");
+  form.reset();
+});
