@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Shopping Cart</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Shopping Cart</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -11,7 +11,7 @@
   <h1>3D Print Shop</h1>
   <div id="topBar">
     <a href="index.html"><button>← Back to Shop</button></a>
-    <a href="admin.html"><button>Admin Panel</button></a>
+    <a href="admin.html" class="adminButton"><button>Admin Panel</button></a>
   </div>
 </header>
 
@@ -21,44 +21,5 @@
 
 <script src="products.js"></script>
 <script src="script.js"></script>
-<script>
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-function saveCart(){ localStorage.setItem("cart", JSON.stringify(cart)); }
-
-function removeFromCart(index){
-  cart.splice(index,1);
-  saveCart();
-  renderCart();
-  updateCartCount();
-}
-
-function renderCart(){
-  const container = document.getElementById("cartItems");
-  container.innerHTML = "";
-  let total = 0;
-  if(cart.length === 0){
-    container.innerHTML = "<p>Your cart is empty!</p>";
-    document.getElementById("cartTotal").textContent = "";
-    return;
-  }
-  cart.forEach((item,i)=>{
-    const div = document.createElement("div");
-    div.className = "item";
-    div.innerHTML = `
-      <img src="${item.image}" alt="${item.name}">
-      <h3>${item.name}</h3>
-      <p>$${item.price}</p>
-      <button onclick="removeFromCart(${i})">Remove</button>
-    `;
-    container.appendChild(div);
-    total += item.price;
-  });
-  document.getElementById("cartTotal").textContent = "Total: $" + total;
-}
-
-renderCart();
-updateCartCount();
-</script>
 </body>
 </html>

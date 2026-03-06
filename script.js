@@ -1,37 +1,46 @@
+// script.js
+
 // Cart persistent
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-// Load products from localStorage if any
-const savedProducts = JSON.parse(localStorage.getItem("products"));
-if(savedProducts) products.splice(0, products.length, ...savedProducts);
+// Save cart to localStorage
+function saveCart(){ localStorage.setItem("cart", JSON.stringify(cart)); }
 
-// Update cart count
+// Add product to cart
+function addToCart(id){
+  const product = products.find(p => p.id === id);
+  if(product){
+    cart.push(product);
+    saveCart();
+    updateCartCount();
+    alert(product.name + " added to cart!");
+  }
+}
+
+// Remove item from cart
+function removeFromCart(index){
+  cart.splice(index,1);
+  saveCart();
+  renderCart();
+  updateCartCount();
+}
+
+// Update cart count in header
 function updateCartCount(){
   const countSpan = document.getElementById("cartCount");
   if(countSpan) countSpan.textContent = cart.length;
 }
 updateCartCount();
 
-// Save cart
-function saveCart(){ localStorage.setItem("cart", JSON.stringify(cart)); }
-
-// Add product to cart
-function addToCart(id){
-  const product = products.find(p => p.id === id);
-  cart.push(product);
-  saveCart();
-  updateCartCount();
-  alert(product.name + " added to cart!");
-}
-
-// Generate product grid
-const grid = document.getElementById("productGrid");
-if(grid){
+// Render shop grid
+function renderShopGrid(){
+  const grid = document.getElementById("productGrid");
+  if(!grid) return;
   grid.innerHTML = "";
-  products.forEach(product => {
-    const item = document.createElement("div");
-    item.className = "item";
-    item.innerHTML = `
+  products.forEach(product=>{
+    const div = document.createElement("div");
+    div.className = "item";
+    div.innerHTML=`
       <a href="product.html?id=${product.id}">
         <img src="${product.image}" alt="${product.name}">
         <h3>${product.name}</h3>
@@ -39,6 +48,37 @@ if(grid){
       </a>
       <button onclick="addToCart(${product.id})">Add to Cart</button>
     `;
-    grid.appendChild(item);
+    grid.appendChild(div);
   });
 }
+
+// Render cart page
+function renderCart(){
+  const container = document.getElementById("cartItems");
+  if(!container) return;
+  container.innerHTML = "";
+  let total = 0;
+  if(cart.length===0){
+    container.innerHTML="<p>Your cart is empty!</p>";
+    document.getElementById("cartTotal").textContent="";
+    return;
+  }
+  cart.forEach((item,i)=>{
+    const div = document.createElement("div");
+    div.className="item";
+    div.innerHTML=`
+      <img src="${item.image}" alt="${item.name}">
+      <h3>${item.name}</h3>
+      <p>$${item.price}</p>
+      <button onclick="removeFromCart(${i})">Remove</button>
+    `;
+    container.appendChild(div);
+    total+=item.price;
+  });
+  document.getElementById("cartTotal").textContent="Total: $"+total;
+}
+
+// Call on page load
+renderShopGrid();
+renderCart();
+updateCartCount();

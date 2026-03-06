@@ -1,3 +1,4 @@
+// products.js
 let products = [
   {
     id: 1,
@@ -14,3 +15,7 @@ let products = [
     description: "Holds pens and small items."
   }
 ];
+
+// Load saved products from localStorage
+const savedProducts = JSON.parse(localStorage.getItem("products"));
+if(savedProducts) products = savedProducts;
