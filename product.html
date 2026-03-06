@@ -26,6 +26,7 @@ const product = products.find(p => p.id === id);
 const page = document.getElementById("productPage");
 
 if(product){
+  incrementClick(product.id);
   page.innerHTML = `
     <h2>${product.name}</h2>
     <img src="${product.image}" alt="${product.name}">

@@ -21,30 +21,45 @@
     <textarea id="description" required></textarea><br><br>
     <label>Price:</label><br>
     <input type="number" id="price" required><br><br>
-    <label>Image URL:</label><br>
-    <input type="text" id="image" required><br><br>
+    <label>Upload Image:</label><br>
+    <input type="file" id="imageFile" accept="image/*"><br><br>
+    <img id="preview" src="" alt="Preview" style="max-width:200px;margin-bottom:10px;"><br>
     <button type="submit">Add Product</button>
   </form>
 </div>
 
+<h2>Manage Products</h2>
+<div id="adminProducts" class="grid"></div>
+
 <script src="products.js"></script>
+<script src="script.js"></script>
 <script>
-const form = document.getElementById("adminForm");
-form.addEventListener("submit",function(e){
+document.getElementById("imageFile").addEventListener("change", function(){
+  handleImageUpload(this,"preview");
+});
+
+document.getElementById("adminForm").addEventListener("submit",function(e){
   e.preventDefault();
-  const newProduct={
+  const image = document.getElementById("preview").dataset.image;
+  if(!image){ alert("Please upload an image"); return; }
+  const newProduct = {
     id: products.length+1,
     name: document.getElementById("name").value,
     description: document.getElementById("description").value,
     price: parseFloat(document.getElementById("price").value),
-    image: document.getElementById("image").value
+    image: image,
+    clicks: 0
   };
   products.push(newProduct);
   localStorage.setItem("products",JSON.stringify(products));
-  alert(newProduct.name+" added successfully!");
-  form.reset();
-  window.location.href="index.html"; // show it immediately
+  alert(newProduct.name+" added!");
+  this.reset();
+  document.getElementById("preview").src="";
+  renderAdminProducts();
+  renderShopGrid();
 });
+
+renderAdminProducts();
 </script>
 </body>
 </html>
