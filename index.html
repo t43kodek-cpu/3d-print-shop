@@ -1,23 +1,18 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>3D Print Shop</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+function updateCartCount(){
+  const countSpan = document.getElementById("cartCount");
+  if(countSpan) {
+    countSpan.textContent = cart.length;
+  }
+}
 
-<header>
-  <h1>3D Print Shop</h1>
-  <div id="topBar">
-    <button onclick="viewCart()">🛒 Cart (<span id="cartCount">0</span>)</button>
-    <a href="admin.html"><button>Admin Panel</button></a>
-  </div>
-</header>
+// Call this whenever the page loads
+updateCartCount();
 
-<div id="productGrid" class="grid"></div>
-
-<script src="products.js"></script>
-<script src="script.js"></script>
-
-</body>
-</html>
+// Update cart count whenever you add to cart
+function addToCart(id){
+  const product = products.find(p => p.id === id);
+  cart.push(product);
+  saveCart();
+  updateCartCount();
+  alert(product.name + " added to cart");
+}

@@ -1,24 +1,42 @@
-const savedProducts = JSON.parse(localStorage.getItem("products"));
-if(savedProducts) {
-  products.splice(0, products.length, ...savedProducts);
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Product Details</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-const form = document.getElementById("adminForm");
+<header>
+  <h1>3D Print Shop</h1>
+  <div id="topBar">
+    <button onclick="viewCart()">🛒 Cart (<span id="cartCount">0</span>)</button>
+    <a href="admin.html"><button>Admin Panel</button></a>
+  </div>
+</header>
 
-form.addEventListener("submit", function(e){
-  e.preventDefault();
+<div id="productPage"></div>
 
-  const newProduct = {
-    id: products.length + 1,
-    name: document.getElementById("name").value,
-    description: document.getElementById("description").value,
-    price: parseFloat(document.getElementById("price").value),
-    image: document.getElementById("image").value
-  };
+<script src="products.js"></script>
+<script src="script.js"></script>
+<script>
+const params = new URLSearchParams(window.location.search);
+const id = parseInt(params.get("id"));
+const product = products.find(p => p.id === id);
+const page = document.getElementById("productPage");
 
-  products.push(newProduct);
-  saveProducts();
+page.innerHTML = `
+  <div class="product-detail">
+    <h2>${product.name}</h2>
+    <img src="${product.image}" alt="${product.name}">
+    <p><strong>Price:</strong> $${product.price}</p>
+    <p>${product.description}</p>
+    <button onclick="addToCart(${product.id})">Add to Cart</button>
+    <br><br>
+    <a href="index.html">← Back to Shop</a>
+  </div>
+`;
+</script>
 
-  alert(newProduct.name + " added successfully!");
-  form.reset();
-});
+</body>
+</html>
