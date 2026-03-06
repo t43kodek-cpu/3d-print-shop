@@ -1,29 +1,19 @@
-let cart = [];
+// Load cart from localStorage or create empty
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-const grid = document.getElementById("productGrid");
-
-if(grid){
-  products.forEach(product => {
-    const item = document.createElement("div");
-    item.className = "item";
-    item.innerHTML = `
-      <a href="product.html?id=${product.id}">
-        <img src="${product.image}" alt="${product.name}">
-        <h3>${product.name}</h3>
-        <p>$${product.price}</p>
-      </a>
-      <button onclick="addToCart(${product.id})">Add to Cart</button>
-    `;
-    grid.appendChild(item);
-  });
+// Save cart to localStorage
+function saveCart() {
+  localStorage.setItem("cart", JSON.stringify(cart));
 }
 
 function addToCart(id){
   const product = products.find(p => p.id === id);
   cart.push(product);
+  saveCart();
   alert(product.name + " added to cart");
 }
 
+// Optional: view cart function
 function viewCart(){
   let total = 0;
   let text = "Cart:\n";
