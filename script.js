@@ -1,11 +1,11 @@
 // Cart persistent
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-// Products persistent
+// Load products from localStorage if any
 const savedProducts = JSON.parse(localStorage.getItem("products"));
 if(savedProducts) products.splice(0, products.length, ...savedProducts);
 
-// Update cart count in header
+// Update cart count
 function updateCartCount(){
   const countSpan = document.getElementById("cartCount");
   if(countSpan) countSpan.textContent = cart.length;
@@ -22,22 +22,6 @@ function addToCart(id){
   saveCart();
   updateCartCount();
   alert(product.name + " added to cart!");
-}
-
-// View cart
-function viewCart(){
-  if(cart.length === 0){
-    alert("Your cart is empty!");
-    return;
-  }
-  let text = "Cart:\n";
-  let total = 0;
-  cart.forEach((p,i)=>{
-    text += `${i+1}. ${p.name} - $${p.price}\n`;
-    total += p.price;
-  });
-  text += `Total: $${total}`;
-  alert(text);
 }
 
 // Generate product grid

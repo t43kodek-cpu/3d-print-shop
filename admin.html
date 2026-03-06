@@ -2,41 +2,55 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Product Details</title>
+  <title>Admin Panel</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
-  <h1>3D Print Shop</h1>
-  <div id="topBar">
-    <button onclick="viewCart()">🛒 Cart (<span id="cartCount">0</span>)</button>
-    <a href="admin.html"><button>Admin Panel</button></a>
-  </div>
+  <h1>Admin Panel</h1>
+  <a href="index.html"><button>Back to Shop</button></a>
 </header>
 
-<div id="productPage"></div>
+<div class="admin-form">
+  <h2>Add a Product</h2>
+  <form id="adminForm">
+    <label>Product Name:</label><br>
+    <input type="text" id="name" required><br><br>
+
+    <label>Description:</label><br>
+    <textarea id="description" required></textarea><br><br>
+
+    <label>Price:</label><br>
+    <input type="number" id="price" required><br><br>
+
+    <label>Image URL:</label><br>
+    <input type="text" id="image" required><br><br>
+
+    <button type="submit">Add Product</button>
+  </form>
+</div>
 
 <script src="products.js"></script>
 <script src="script.js"></script>
 <script>
-const params = new URLSearchParams(window.location.search);
-const id = parseInt(params.get("id"));
-const product = products.find(p => p.id === id);
-const page = document.getElementById("productPage");
+const savedProducts = JSON.parse(localStorage.getItem("products"));
+if(savedProducts) products.splice(0, products.length, ...savedProducts);
 
-page.innerHTML = `
-  <div class="product-detail">
-    <h2>${product.name}</h2>
-    <img src="${product.image}" alt="${product.name}">
-    <p><strong>Price:</strong> $${product.price}</p>
-    <p>${product.description}</p>
-    <button onclick="addToCart(${product.id})">Add to Cart</button>
-    <br><br>
-    <a href="index.html">← Back to Shop</a>
-  </div>
-`;
+document.getElementById("adminForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  const newProduct = {
+    id: products.length + 1,
+    name: document.getElementById("name").value,
+    description: document.getElementById("description").value,
+    price: parseFloat(document.getElementById("price").value),
+    image: document.getElementById("image").value
+  };
+  products.push(newProduct);
+  localStorage.setItem("products", JSON.stringify(products));
+  alert(newProduct.name + " added successfully!");
+  this.reset();
+});
 </script>
-
 </body>
 </html>

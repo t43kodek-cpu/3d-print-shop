@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>3D Print Shop</title>
+  <title>Product Details</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -10,15 +10,34 @@
 <header>
   <h1>3D Print Shop</h1>
   <div id="topBar">
-    <button onclick="viewCart()">🛒 Cart (<span id="cartCount">0</span>)</button>
+    <button onclick="window.location.href='cart.html'">🛒 Cart (<span id="cartCount">0</span>)</button>
     <a href="admin.html"><button>Admin Panel</button></a>
   </div>
 </header>
 
-<div id="productGrid" class="grid"></div>
+<div id="productPage" class="product-detail"></div>
 
 <script src="products.js"></script>
 <script src="script.js"></script>
+<script>
+const params = new URLSearchParams(window.location.search);
+const id = parseInt(params.get("id"));
+const product = products.find(p => p.id === id);
+const page = document.getElementById("productPage");
 
+if(product){
+  page.innerHTML = `
+    <h2>${product.name}</h2>
+    <img src="${product.image}" alt="${product.name}">
+    <p><strong>Price:</strong> $${product.price}</p>
+    <p>${product.description}</p>
+    <button onclick="addToCart(${product.id})">Add to Cart</button>
+    <br><br>
+    <a href="index.html">← Back to Shop</a>
+  `;
+} else {
+  page.innerHTML = "<p>Product not found. <a href='index.html'>Back to Shop</a></p>";
+}
+</script>
 </body>
 </html>
